@@ -1,25 +1,29 @@
 import express, { Request, Response } from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
 import "reflect-metadata";
-import { DataSource } from "typeorm";
+// routes
+import userRoutes from "./routes/userRoutes";
+import cartRoutes from "./routes/cartRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
+import productRoutes from "./routes/productRoutes";
+
+import AppDataSource from "./dbconnect/dbconnect";
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
+// app.use(bodyParser.json());
 
-app.get("/", (req: Request, res: Response): void => {
-  res.send("Welcome to the Express app!");
-});
+// routes
+app.use("/api/users", userRoutes);
+app.use("/api/carts", cartRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/products", productRoutes);
 
 // db connect
-const AppDataSource = new DataSource({
-  type: "postgres",
-  host: "localhost",
-  port: 5432,
-  username: "postgres",
-  password: "postgres",
-  database: "testdatabase",
-});
 
 AppDataSource.initialize()
   .then(() => {
