@@ -4,13 +4,23 @@ import {
   getAllUsers,
   updateUser,
 } from "../controllers/userController";
+import {
+  validatePassedUserId,
+  validateUser,
+} from "../middlewares/uesrs/userValidations";
+import { authenticateToken } from "../middlewares/authValidation";
 
 const router = Router();
 
-router.get("/getallusers", getAllUsers);
+router.get("/getallusers", authenticateToken, getAllUsers);
 
-router.post("/createnewuser", createNewUser);
+router.post("/createnewuser", validateUser, createNewUser);
 
-router.put("/updateuser/:userid", updateUser);
+router.put(
+  "/updateuser/:userid",
+  validatePassedUserId,
+  validateUser,
+  updateUser
+);
 
 export default router;

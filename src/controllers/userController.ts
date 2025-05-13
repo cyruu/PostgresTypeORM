@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { User } from "../entities/User";
 import AppDataSource from "../dbconnect/dbconnect";
 import { Profile } from "../entities/Profile";
+import { plainToInstance } from "class-transformer";
+import { validate } from "class-validator";
 
 // get all users
 export const getAllUsers = async (
@@ -21,6 +23,14 @@ export const createNewUser = async (
   res: Response
 ): Promise<any> => {
   const { firstName, lastName, email } = req.body;
+  const userInstance = plainToInstance(User, req.body);
+  const errors = await validate(userInstance);
+  if (errors.length > 0) {
+    return res.status(400).json({
+      message: Object.values(errors[0].constraints || {})[0],
+      statusCode: 400, // 400 for validation error
+    });
+  }
 
   const userRepo = AppDataSource.getRepository(User);
   const profileRepo = AppDataSource.getRepository(Profile);

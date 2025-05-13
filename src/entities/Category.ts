@@ -6,6 +6,7 @@ import {
   JoinTable,
 } from "typeorm";
 import { Product } from "./Product";
+import { ArrayNotEmpty, IsNotEmpty } from "class-validator";
 
 @Entity()
 export class Category {
@@ -13,9 +14,9 @@ export class Category {
   id: number;
 
   @Column()
+  @IsNotEmpty({ message: "name cannot be empty" })
   name: string;
 
   @ManyToMany(() => Product, (product) => product.categories)
-  @JoinTable()
   products: Product[];
 }

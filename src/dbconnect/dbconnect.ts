@@ -10,8 +10,8 @@ export default new DataSource({
   database: "testdatabase",
   entities: ["src/entities/*{.ts,.js}"],
   migrations: ["src/migrations/*.ts"],
-  migrationsTableName: "migrations",
+  // migrationsTableName: "migrations",
 
-  synchronize: true,
+  // synchronize: true,
   logging: true,
 });
